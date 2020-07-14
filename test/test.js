@@ -11,6 +11,7 @@ const {
 const mockPullRequests = [
   {
     number: 1,
+    title: 'Pull Request 1',
     html_url: 'https://example.com/1',
     requested_reviewers: [
       {
@@ -23,11 +24,13 @@ const mockPullRequests = [
   },
   {
     number: 2,
+    title: 'Pull Request 2',
     html_url: 'https://example.com/2',
     requested_reviewers: []
   },
   {
     number: 3,
+    title: 'Pull Request 3',
     html_url: 'https://example.com/3',
     requested_reviewers: [
       {
@@ -50,14 +53,17 @@ const mockPullRequestsNoData = [];
 const mockPr2User = [
   {
     login: 'User1',
+    title: 'Pull Request 1',
     url: 'https://example.com/1'
   },
   {
     login: 'User2',
+    title: 'Pull Request 1',
     url: 'https://example.com/1'
   },
   {
     login: 'User3',
+    title: 'Pull Request 3',
     url: 'https://example.com/3'
   }
 ];
@@ -141,24 +147,24 @@ describe('Pull Request Reviews Reminder Action tests', () => {
   it('Should print the pretty message, one reviewer per row (correct map)', () => {
     const message = prettyMessage(mockPr2User, mockGithub2provider);
     const [firstRow, secondRow, thirdRow] = message.split('\r\n');
-    assert.strictEqual(firstRow, 'Hey <@ID123>, [ID1](https://example.com/1) is waiting for your review.');
-    assert.strictEqual(secondRow, 'Hey <@ID456>, [ID1](https://example.com/1) is waiting for your review.');
-    assert.strictEqual(thirdRow, 'Hey <@789>, [ID3](https://example.com/3) is waiting for your review.');
+    assert.strictEqual(firstRow, 'Hey <@ID123>, [Pull Request 1](https://example.com/1) is waiting for your review.');
+    assert.strictEqual(secondRow, 'Hey <@ID456>, [Pull Request 1](https://example.com/1) is waiting for your review.');
+    assert.strictEqual(thirdRow, 'Hey <@ID789>, [Pull Request 3](https://example.com/3) is waiting for your review.');
   });
 
   it('Should print the pretty message, one reviewer per row (malformed map)', () => {
     const message = prettyMessage(mockPr2User, mockGithub2providerMalformed);
     const [firstRow, secondRow] = message.split('\r\n');
-    assert.strictEqual(firstRow, 'Hey @User1, [ID1](https://example.com/1) is waiting for your review.');
-    assert.strictEqual(secondRow, 'Hey @User2, [ID1](https://example.com/1) is waiting for your review.');
+    assert.strictEqual(firstRow, 'Hey @User1, [Pull Request 1](https://example.com/1) is waiting for your review.');
+    assert.strictEqual(secondRow, 'Hey @User2, [Pull Request 1](https://example.com/1) is waiting for your review.');
   });
 
   it('Should print the pretty message, one reviewer per row (no map)', () => {
     const message = prettyMessage(mockPr2User, mockGithub2providerNoData);
     const [firstRow, secondRow, thirdRow] = message.split('\r\n');
-    assert.strictEqual(firstRow, 'Hey @User1, [ID1](https://example.com/1) is waiting for your review.');
-    assert.strictEqual(secondRow, 'Hey @User2, [ID2](https://example.com/2) is waiting for your review.');
-    assert.strictEqual(thirdRow, 'Hey @User3, [ID3](https://example.com/3) is waiting for your review.');
+    assert.strictEqual(firstRow, 'Hey @User1, [Pull Request 1](https://example.com/1) is waiting for your review.');
+    assert.strictEqual(secondRow, 'Hey @User2, [Pull Request 1](https://example.com/1) is waiting for your review.');
+    assert.strictEqual(thirdRow, 'Hey @User3, [Pull Request 3](https://example.com/3) is waiting for your review.');
   });
 
 });
